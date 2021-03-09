@@ -11,5 +11,3 @@ golang
 restful
 mysql
 es
-
-**我是远程添加的文案**
