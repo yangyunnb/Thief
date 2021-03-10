@@ -1,10 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"github.com/Thief.git/controller"
+	"github.com/kataras/iris"
+	"github.com/kataras/iris/mvc"
+)
 
 func main() {
-	// 我是dev分支的代码
-	// 我是master分支的代码
-	name := "yangyun"
-	fmt.Printf("hello world:%s\n", name)
+	app := iris.New()
+
+	routerPart := app.Party("/")
+	mvc.New(routerPart).Handle(&controller.Health{})
+
+	if err := app.Run(iris.Addr(":8080")); err != nil {
+		panic(err)
+	}
 }
