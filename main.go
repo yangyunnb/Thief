@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/Thief.git/initserver"
 
 	"github.com/Thief.git/controller"
 	"github.com/kataras/iris"
@@ -34,8 +37,14 @@ func main() {
 	}()
 
 	healthPart := app.Party("/")
+
 	mvc.New(healthPart).Handle(&controller.Health{})
-	if err := app.Run(iris.Addr(":8080"), iris.WithoutInterruptHandler); err != nil {
+	if err := app.Run(iris.Addr(fmt.Sprintf(":%d", initserver.Conf.Server.Port)), iris.WithoutInterruptHandler, iris.WithConfiguration(iris.Configuration{
+		DisablePathCorrection: initserver.Conf.Server.DisablePathCorrection,
+		EnablePathEscape:      initserver.Conf.Server.EnablePathEscape,
+		FireMethodNotAllowed:  initserver.Conf.Server.FireMethodNotAllowed,
+		Charset:               initserver.Conf.Server.Charset,
+	})); err != nil {
 		panic(err)
 	}
 	<-doneChan

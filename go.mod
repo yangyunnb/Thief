@@ -21,6 +21,7 @@ require (
 	github.com/iris-contrib/jade v1.1.4 // indirect
 	github.com/iris-contrib/pongo2 v0.0.1 // indirect
 	github.com/iris-contrib/schema v0.0.2 // indirect
+	github.com/jinzhu/configor v1.2.1
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/kataras/blocks v0.0.2 // indirect
 	github.com/kataras/golog v0.0.18 // indirect

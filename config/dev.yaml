@@ -1,0 +1,7 @@
+server:
+  port: 8080
+  charset: UTF-8
+  disablePathCorrection: false
+  enablePathEscape: false
+  fireMethodNotAllowed: false
+  disableBodyConsumptionOnUnmarshal: false
