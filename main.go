@@ -12,25 +12,25 @@ import (
 	"github.com/kataras/iris/mvc"
 )
 
+const ServerRemainTime = 5
+
 func main() {
 	app := iris.New()
 	doneChan := make(chan bool, 1)
 
 	go func() {
 		signalChan := make(chan os.Signal, 1)
-		signal.Notify(signalChan, os.Interrupt, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGKILL, syscall.SIGTERM)
+		signal.Notify(signalChan, os.Interrupt, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 
-		select {
-		case <-signalChan:
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			defer cancel()
+		<-signalChan
+		ctx, cancel := context.WithTimeout(context.Background(), ServerRemainTime*time.Second)
+		defer cancel()
 
-			<-ctx.Done()
-			if err := app.Shutdown(ctx); err != nil {
-				app.Logger().Error(err.Error())
-			}
-			close(doneChan)
+		<-ctx.Done()
+		if err := app.Shutdown(ctx); err != nil {
+			app.Logger().Error(err.Error())
 		}
+		close(doneChan)
 	}()
 
 	healthPart := app.Party("/")
