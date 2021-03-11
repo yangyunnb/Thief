@@ -1,6 +1,9 @@
 package initserver
 
-import "github.com/jinzhu/configor"
+import (
+	"github.com/jinzhu/configor"
+	"github.com/kataras/iris"
+)
 
 var Conf config
 
@@ -19,7 +22,7 @@ type ServerConfig struct {
 
 func InitConfig() {
 	const configFile = "config/dev.yaml"
-
+	iris.YAML(configFile)
 	if err := configor.Load(&Conf, configFile); err != nil {
 		panic(err)
 	}
