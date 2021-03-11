@@ -75,10 +75,3 @@ func shutDownServer(app *iris.Application, doneChan chan bool) {
 	}
 	close(doneChan)
 }
-
-func RegisterMiddleWare(app *iris.Application) {
-	app.Use(func(ctx iris.Context) {
-		app.Logger().Info("")
-		ctx.Next()
-	})
-}
