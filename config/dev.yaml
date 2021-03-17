@@ -5,3 +5,8 @@ server:
   enablePathEscape: false
   fireMethodNotAllowed: false
   disableBodyConsumptionOnUnmarshal: false
+
+mysql:
+  dsn: "xiaoju:Zj$741943@tcp(10.96.84.241:3306)/scenter?timeout=500ms&readTimeout=300ms&writeTimeout=500ms&loc=Local&parseTime=true"
+  maxIdConn: 100
+  maxOpenConn: 300

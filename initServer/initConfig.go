@@ -2,13 +2,13 @@ package initserver
 
 import (
 	"github.com/jinzhu/configor"
-	"github.com/kataras/iris"
 )
 
 var Conf config
 
 type config struct {
 	Server ServerConfig `yaml:"server"`
+	Mysql  MysqlConfig  `yaml:"mysql"`
 }
 
 type ServerConfig struct {
@@ -20,9 +20,14 @@ type ServerConfig struct {
 	DisableBodyConsumptionOnUnmarshal bool   `yaml:"disableBodyConsumptionOnUnmarshal"`
 }
 
+type MysqlConfig struct {
+	DSN         string `yaml:"dsn"`
+	MaxIDConn   int    `yaml:"maxIdConn"`
+	MaxOpenConn int    `yaml:"maxOpenConn"`
+}
+
 func InitConfig() {
 	const configFile = "config/dev.yaml"
-	iris.YAML(configFile)
 	if err := configor.Load(&Conf, configFile); err != nil {
 		panic(err)
 	}

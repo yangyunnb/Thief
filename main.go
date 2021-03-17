@@ -5,50 +5,35 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 	"time"
+
+	"github.com/Thief.git/middleware"
+	"github.com/kataras/iris/middleware/logger"
+	"github.com/kataras/iris/middleware/recover"
 
 	"github.com/Thief.git/controller"
 	"github.com/kataras/iris/mvc"
 
-	"github.com/kataras/iris/macro"
-
 	"github.com/Thief.git/initserver"
-
 	"github.com/kataras/iris"
 )
 
-const ServerRemainTime = 5
-
 func main() {
+	// 1.新建server
 	app := iris.New()
-	doneChan := make(chan bool, 1)
-	go shutDownServer(app, doneChan)
-	initserver.InitMiddleWare(app)
+	registerMiddleWare(app)
 
+	// 2.路由设置
 	healthPart := app.Party("/")
 	mvc.New(healthPart).Handle(&controller.Health{})
 
-	macro.Int.RegisterFunc("min", func(minValue int) func(string) bool {
-		return func(paramValue string) bool {
-			n, err := strconv.Atoi(paramValue)
-			if err != nil {
-				return false
-			}
+	moviePart := app.Party("/movie")
+	mvc.New(moviePart).Handle(&controller.Movie{})
 
-			if n <= minValue {
-				return false
-			}
-			return true
-		}
-	})
-
-	userPart := app.Party("/user")
-	userPart.Handle("GET", "/getUser/{id:int min(10) else 504}", func(ctx iris.Context) {
-		ctx.JSON(ctx.Params().Get("id"))
-	})
-	app.Use()
+	// 3.启动server
+	doneChan := make(chan bool, 1)
+	go shutDownServer(app, doneChan)
 
 	if err := app.Run(iris.Addr(fmt.Sprintf(":%d", initserver.Conf.Server.Port)), iris.WithoutInterruptHandler, iris.WithConfiguration(iris.Configuration{
 		DisablePathCorrection: initserver.Conf.Server.DisablePathCorrection,
@@ -61,7 +46,10 @@ func main() {
 	<-doneChan
 }
 
+// server优雅退出
 func shutDownServer(app *iris.Application, doneChan chan bool) {
+	// server延迟退出时间
+	const ServerRemainTime = 5
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 
@@ -74,4 +62,13 @@ func shutDownServer(app *iris.Application, doneChan chan bool) {
 		app.Logger().Error(err.Error())
 	}
 	close(doneChan)
+}
+
+// 注册服务用到的中间件
+func registerMiddleWare(app *iris.Application) {
+	app.Use(recover.New())
+	app.Use(logger.New())
+	app.Use(middleware.LoginFilter)
+	app.Use(middleware.RequestInFilter)
+	app.Use(middleware.RequestOutFilter)
 }

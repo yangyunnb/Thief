@@ -11,6 +11,7 @@ require (
 	github.com/dgraph-io/badger/v2 v2.2007.2 // indirect
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3 // indirect
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gomodule/redigo v1.8.2 // indirect
 	github.com/google/uuid v1.1.2-0.20200519141726-cb32006e483f // indirect
 	github.com/gorilla/schema v1.2.0 // indirect
@@ -22,6 +23,7 @@ require (
 	github.com/iris-contrib/pongo2 v0.0.1 // indirect
 	github.com/iris-contrib/schema v0.0.2 // indirect
 	github.com/jinzhu/configor v1.2.1
+	github.com/jinzhu/gorm v1.9.16
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/kataras/blocks v0.0.2 // indirect
 	github.com/kataras/golog v0.0.18 // indirect
