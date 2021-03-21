@@ -8,6 +8,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Thief.git/logic/websocket"
+
 	"github.com/Thief.git/middleware"
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
@@ -31,10 +33,14 @@ func main() {
 	moviePart := app.Party("/movie")
 	mvc.New(moviePart).Handle(&controller.Movie{})
 
-	// 3.启动server
+	// 多人聊天室
+	wsPart := app.Party("/ws")
+	mvc.New(wsPart).Handle(&controller.WebsocketController{})
+
+	// 4.启动server
 	doneChan := make(chan bool, 1)
 	go shutDownServer(app, doneChan)
-
+	go websocket.GetHub().Run()
 	if err := app.Run(iris.Addr(fmt.Sprintf(":%d", initserver.Conf.Server.Port)), iris.WithoutInterruptHandler, iris.WithConfiguration(iris.Configuration{
 		DisablePathCorrection: initserver.Conf.Server.DisablePathCorrection,
 		EnablePathEscape:      initserver.Conf.Server.EnablePathEscape,

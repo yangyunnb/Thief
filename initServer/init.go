@@ -2,5 +2,7 @@ package initserver
 
 func init() {
 	InitConfig()
-	InitMysql()
+	//InitMysql()
+	InitWebSocket()
+	InitRedis()
 }

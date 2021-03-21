@@ -10,3 +10,18 @@ mysql:
   dsn: "xiaoju:Zj$741943@tcp(10.96.84.241:3306)/scenter?timeout=500ms&readTimeout=300ms&writeTimeout=500ms&loc=Local&parseTime=true"
   maxIdConn: 100
   maxOpenConn: 300
+
+websocket:
+  readBufferSize: 1024
+  writeBufferSize: 1024
+  handshakeTimeout: 2
+  writeTimeout: 4
+  readTimeout: 2
+
+redis:
+  host: "127.0.0.1:6379"
+  poolSize: 100
+  maxConn: 2000
+  connTimeout: "500ms"
+  readTimeout: "500ms"
+  writeTimeout: "500ms"
